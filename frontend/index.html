@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.gstatic.com;">
+    <meta name="description" content="Client-side presentation layer housing user interfaces, responsive views, interactive dashboards, and styling.">
+    <title>SIH-26028 • Frontend</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #07090e;
+            --card-bg: rgba(15, 23, 42, 0.75);
+            --card-border: rgba(255, 255, 255, 0.08);
+            --card-border-hover: rgba(99, 102, 241, 0.4);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent: #6366f1;
+            --accent-glow: rgba(99, 102, 241, 0.25);
+            --accent-cyan: #06b6d4;
+            --accent-emerald: #10b981;
+            --code-bg: rgba(0, 0, 0, 0.4);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--bg);
+            background-image: 
+                radial-gradient(rgba(99, 102, 241, 0.1) 1px, transparent 1px),
+                radial-gradient(circle at 50% 0%, rgba(99, 102, 241, 0.16) 0%, transparent 60%);
+            background-size: 32px 32px, 100% 100%;
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            line-height: 1.6;
+        }
+
+        header {
+            border-bottom: 1px solid var(--card-border);
+            backdrop-filter: blur(12px);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background: rgba(7, 9, 14, 0.8);
+        }
+
+        .top-bar {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+            color: var(--text-main);
+        }
+
+        .brand-logo {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, #6366f1, #06b6d4);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            box-shadow: 0 0 15px var(--accent-glow);
+        }
+
+        .brand-name {
+            font-weight: 700;
+            font-size: 1.15rem;
+            letter-spacing: -0.02em;
+        }
+
+        .brand-sub {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-left: 0.5rem;
+            padding-left: 0.5rem;
+            border-left: 1px solid var(--card-border);
+        }
+
+        .status-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.25);
+            color: var(--accent-emerald);
+            padding: 0.35rem 0.85rem;
+            border-radius: 9999px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .pulse-dot {
+            width: 7px;
+            height: 7px;
+            background-color: var(--accent-emerald);
+            border-radius: 50%;
+            box-shadow: 0 0 8px var(--accent-emerald);
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.3); }
+        }
+
+        nav.module-nav {
+            background: rgba(15, 23, 42, 0.4);
+            border-bottom: 1px solid var(--card-border);
+            overflow-x: auto;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0.5rem 1.5rem;
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .nav-item {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            color: var(--text-muted);
+            text-decoration: none;
+            padding: 0.45rem 0.85rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            white-space: nowrap;
+            transition: all 0.2s ease;
+        }
+
+        .nav-item:hover {
+            color: var(--text-main);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .nav-item.active {
+            color: var(--text-main);
+            background: rgba(99, 102, 241, 0.15);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+        }
+
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 1.5rem;
+            flex: 1;
+            width: 100%;
+        }
+
+        .hero {
+            text-align: center;
+            max-width: 780px;
+            margin: 0 auto 3rem;
+        }
+
+        .badge-wrapper {
+            margin-bottom: 1.25rem;
+        }
+
+        .badge {
+            display: inline-block;
+            background: rgba(99, 102, 241, 0.12);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            color: #a5b4fc;
+            padding: 0.35rem 1rem;
+            border-radius: 9999px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+        }
+
+        .hero-title {
+            font-size: clamp(2rem, 5vw, 3.25rem);
+            font-weight: 700;
+            line-height: 1.15;
+            letter-spacing: -0.03em;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #ffffff 40%, #a5b4fc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-desc {
+            color: var(--text-muted);
+            font-size: 1.15rem;
+            line-height: 1.7;
+            margin-bottom: 2rem;
+        }
+
+        .actions-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.35rem;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            border: none;
+            font-family: inherit;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #6366f1, #4f46e5);
+            color: white;
+            box-shadow: 0 4px 20px var(--accent-glow);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(99, 102, 241, 0.45);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-main);
+            border: 1px solid var(--card-border);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        @media (max-width: 768px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+            .brand-sub {
+                display: none;
+            }
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 1.75rem;
+            backdrop-filter: blur(16px);
+            transition: all 0.25s ease;
+        }
+
+        .card:hover {
+            border-color: var(--card-border-hover);
+        }
+
+        .card-heading {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1.25rem;
+            color: var(--text-main);
+        }
+
+        .card-heading-icon {
+            font-size: 1.4rem;
+        }
+
+        .checklist {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.85rem;
+        }
+
+        .checklist li {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        .check-icon {
+            color: var(--accent-emerald);
+            background: rgba(16, 185, 129, 0.12);
+            border-radius: 50%;
+            width: 22px;
+            height: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .info-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+
+        .info-table td {
+            padding: 0.65rem 0;
+            border-bottom: 1px solid var(--card-border);
+        }
+
+        .info-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .info-label {
+            color: var(--text-muted);
+            width: 40%;
+        }
+
+        .info-val {
+            color: var(--text-main);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+        }
+
+        .modules-section {
+            margin-top: 3rem;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.02em;
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1.25rem;
+        }
+
+        .module-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 14px;
+            padding: 1.5rem;
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .module-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent);
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.15);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .card-icon {
+            font-size: 1.75rem;
+        }
+
+        .card-tag {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.65rem;
+            background: rgba(255, 255, 255, 0.06);
+            border-radius: 6px;
+            color: var(--accent-cyan);
+            font-weight: 500;
+        }
+
+        .card-title {
+            font-size: 1.15rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .card-desc {
+            color: var(--text-muted);
+            font-size: 0.875rem;
+            line-height: 1.5;
+            margin-bottom: 1.25rem;
+            flex: 1;
+        }
+
+        .card-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-top: 0.75rem;
+            border-top: 1px solid var(--card-border);
+        }
+
+        .card-path code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            color: #a5b4fc;
+        }
+
+        .card-arrow {
+            color: var(--accent);
+            font-weight: 700;
+            transition: transform 0.2s ease;
+        }
+
+        .module-card:hover .card-arrow {
+            transform: translateX(4px);
+        }
+
+        footer {
+            border-top: 1px solid var(--card-border);
+            padding: 2rem 1.5rem;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            margin-top: auto;
+        }
+
+        .copy-toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: #1e293b;
+            color: #f8fafc;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 0.75rem 1.25rem;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            display: none;
+            align-items: center;
+            gap: 0.5rem;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="top-bar">
+            <a href="../index.html" class="brand" id="brand-link">
+                <div class="brand-logo">⚡</div>
+                <div>
+                    <span class="brand-name">SIH-26028</span>
+                    <span class="brand-sub">Smart India Hackathon</span>
+                </div>
+            </a>
+            <div class="status-pill" id="status-pill">
+                <span class="pulse-dot"></span>
+                <span>Tracked in Git</span>
+            </div>
+        </div>
+        <nav class="module-nav" aria-label="Module Navigation">
+            <div class="nav-container">
+                <a href="../index.html" class="nav-item " id="nav-root"><span class="nav-icon">⚡</span> Project Hub</a><a href="#" class="nav-item active" id="nav-frontend"><span class="nav-icon">🎨</span> Frontend</a><a href="../backend/index.html" class="nav-item " id="nav-backend"><span class="nav-icon">⚙️</span> Backend</a><a href="../ai/index.html" class="nav-item " id="nav-ai"><span class="nav-icon">🧠</span> AI Core</a><a href="../ai/ml/index.html" class="nav-item " id="nav-ml"><span class="nav-icon">📊</span> Machine Learning</a><a href="../data/index.html" class="nav-item " id="nav-data"><span class="nav-icon">💾</span> Data Repository</a><a href="../pdfs%20and%20all/index.html" class="nav-item " id="nav-docs"><span class="nav-icon">📁</span> Documents & PDFs</a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <div class="hero">
+            <div class="badge-wrapper">
+                <span class="badge">Module: frontend/</span>
+            </div>
+            <h1 class="hero-title">Frontend Application</h1>
+            <p class="hero-desc">Client-side presentation layer housing user interfaces, responsive views, interactive dashboards, and styling.</p>
+            <div class="actions-row">
+                <button class="btn btn-primary" id="copy-path-btn" data-path="frontend">
+                    <span>📋</span> Copy Path (<code>frontend/</code>)
+                </button>
+                <a href="https://github.com/Umar-Firoz/SIH-26028" target="_blank" rel="noopener noreferrer" class="btn btn-secondary" id="github-link">
+                    <span>↗</span> View GitHub Repository
+                </a>
+            </div>
+        </div>
+
+        <div class="content-grid">
+            <div class="card">
+                <h2 class="card-heading">
+                    <span class="card-heading-icon">📌</span>
+                    <span>Module Checklist</span>
+                </h2>
+                <ul class="checklist">
+                    <li><span class="check-icon">✓</span> <span>Set up UI framework or vanilla components</span></li><li><span class="check-icon">✓</span> <span>Establish design tokens, color scheme, and typography</span></li><li><span class="check-icon">✓</span> <span>Implement API communication services</span></li><li><span class="check-icon">✓</span> <span>Build responsive views for hackathon demo presentation</span></li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h2 class="card-heading">
+                    <span class="card-heading-icon">ℹ️</span>
+                    <span>Module Metadata</span>
+                </h2>
+                <table class="info-table">
+                    <tbody>
+                        <tr>
+                            <td class="info-label">Repository</td>
+                            <td class="info-val">Umar-Firoz/SIH-26028</td>
+                        </tr>
+                        <tr>
+                            <td class="info-label">Directory Path</td>
+                            <td class="info-val">frontend/</td>
+                        </tr>
+                        <tr>
+                            <td class="info-label">Tier / Role</td>
+                            <td class="info-val">Client Tier</td>
+                        </tr>
+                        <tr>
+                            <td class="info-label">Git Status</td>
+                            <td class="info-val">Ready to Commit</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        
+    </main>
+
+    <footer>
+        <p>Smart India Hackathon • Problem Statement ID: <strong>SIH-26028</strong> • Workspace Module</p>
+    </footer>
+
+    <div class="copy-toast" id="copy-toast" role="alert">
+        <span>✓</span> Copied path to clipboard!
+    </div>
+
+    <script>
+        const copyBtn = document.getElementById('copy-path-btn');
+        const toast = document.getElementById('copy-toast');
+        if (copyBtn) {
+            copyBtn.addEventListener('click', () => {
+                const pathText = copyBtn.getAttribute('data-path') || '.';
+                navigator.clipboard.writeText(pathText).then(() => {
+                    if (toast) {
+                        toast.style.display = 'flex';
+                        setTimeout(() => {
+                            toast.style.display = 'none';
+                        }, 2200);
+                    }
+                }).catch(() => {
+                    // Fallback
+                });
+            });
+        }
+    </script>
+</body>
+</html>
