@@ -1,0 +1,86 @@
+# Fixed project name so container/volume names don't depend on the checkout folder name
+name: sih-26028
+
+# Example (sanitized) docker-compose for development/deployment examples.
+# This file intentionally avoids exposing host ports and never embeds secrets.
+# Provide real secrets and any port mappings via a local `.env` file (gitignored).
+
+services:
+
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-sih}
+      POSTGRES_USER: ${POSTGRES_USER:-sih_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-changeme}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-sih_user} -d ${POSTGRES_DB:-sih}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  ml-service:
+    build:
+      context: ./ml-service
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    environment:
+      ML_SERVICE_ENV: ${ML_SERVICE_ENV:-production}
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    depends_on:
+      - postgres
+      - ml-service
+    environment:
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      ML_API_URL: http://ml-service:8000
+      RAILWAY_API_KEY: ${RAILWAY_API_KEY}
+      OPENWEATHER_API_KEY: ${OPENWEATHER_API_KEY}
+      TRAIN_DATA_FETCH_INTERVAL: ${TRAIN_DATA_FETCH_INTERVAL:-300000}
+      ACTIVE_TRAIN_NUMBERS: ${ACTIVE_TRAIN_NUMBERS:-12919,12920}
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  frontend:
+    image: node:20-alpine
+    working_dir: /app
+    volumes:
+      # writable: npm install needs to write inside the project folder
+      - ./frontend/railway-frontend:/app
+      # keep the container's node_modules separate from the host's
+      - /app/node_modules
+    command: sh -c "npm install && npm run dev -- --host 0.0.0.0 --port 5173"
+    # Expose the dev server in your local docker-compose.yml, e.g.:
+    # ports:
+    #   - "5173:5173"
+    depends_on:
+      backend:
+        condition: service_healthy
+    environment:
+      VITE_USE_POLLING: "true"
+      # Browser calls /api on the same origin; Vite proxies it to the backend container
+      API_PROXY_TARGET: http://backend:8080
+
+volumes:
+  postgres_data:
