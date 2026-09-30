@@ -1,0 +1,9 @@
+{
+  "historical_delay_rate": 0.718886,
+  "historical_ontime_pct": 28.111399999999996,
+  "historical_avg_delay_minutes": 97.72833,
+  "historical_avg_speed_kmph": 55.0,
+  "default_ontime_pct": 28.111399999999996,
+  "default_delay_minutes": 97.72833,
+  "total_training_records": 1500000
+}
