@@ -1,0 +1,29 @@
+{
+  "model_version": "hybrid-eta-v1",
+  "description": "Hybrid ETA pipeline using live ETAPredictionRequest data and historical railway delay context.",
+  "delay_risk_model": "delay-risk-v1",
+  "required_request_fields": [
+    "train_id",
+    "target_station_id",
+    "observed_at",
+    "current_speed_kmph",
+    "average_speed_last_5_minutes",
+    "current_delay_minutes",
+    "distance_to_target_km",
+    "scheduled_time_to_target_minutes"
+  ],
+  "optional_request_fields": [
+    "rainfall_mm",
+    "congestion_score",
+    "historical_section_average_minutes"
+  ],
+  "pipeline_components": [
+    "scheduled_baseline",
+    "historical_section_eta",
+    "live_speed_eta",
+    "current_delay_propagation",
+    "rainfall_adjustment",
+    "congestion_adjustment",
+    "prediction_interval"
+  ]
+}

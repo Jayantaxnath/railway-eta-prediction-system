@@ -1,0 +1,184 @@
+Use these payloads in **`/docs` → prediction endpoint → Try it out → Execute**. These cover normal, boundary, optional-null, and invalid-input cases.
+
+## 1. Normal running train
+
+```json
+{
+  "train_id": "12345",
+  "target_station_id": "GHY",
+  "observed_at": "2026-09-04T19:30:00+05:30",
+  "current_speed_kmph": 65.0,
+  "average_speed_last_5_minutes": 60.0,
+  "current_delay_minutes": 15.0,
+  "distance_to_target_km": 120.0,
+  "scheduled_time_to_target_minutes": 110.0,
+  "rainfall_mm": 0.0,
+  "congestion_score": 0.3,
+  "historical_section_average_minutes": 125.0
+}
+```
+
+## 2. Train is almost at the station
+
+Good edge case for very small remaining distance.
+
+```json
+{
+  "train_id": "12345",
+  "target_station_id": "GHY",
+  "observed_at": "2026-09-04T19:35:00+05:30",
+  "current_speed_kmph": 12.0,
+  "average_speed_last_5_minutes": 18.0,
+  "current_delay_minutes": 5.0,
+  "distance_to_target_km": 0.2,
+  "scheduled_time_to_target_minutes": 3.0,
+  "rainfall_mm": 0.0,
+  "congestion_score": 0.2,
+  "historical_section_average_minutes": 5.0
+}
+```
+
+## 3. Train stopped
+
+Important for real-world situations such as signals, congestion, or an unscheduled stop.
+
+```json
+{
+  "train_id": "12345",
+  "target_station_id": "GHY",
+  "observed_at": "2026-09-04T19:40:00+05:30",
+  "current_speed_kmph": 0.0,
+  "average_speed_last_5_minutes": 0.0,
+  "current_delay_minutes": 45.0,
+  "distance_to_target_km": 50.0,
+  "scheduled_time_to_target_minutes": 40.0,
+  "rainfall_mm": 5.0,
+  "congestion_score": 0.9,
+  "historical_section_average_minutes": 65.0
+}
+```
+
+## 4. Optional data unavailable
+
+Tests whether your backend correctly handles `null` optional fields.
+
+```json
+{
+  "train_id": "12345",
+  "target_station_id": "GHY",
+  "observed_at": "2026-09-04T19:45:00+05:30",
+  "current_speed_kmph": 50.0,
+  "average_speed_last_5_minutes": 48.0,
+  "current_delay_minutes": 10.0,
+  "distance_to_target_km": 80.0,
+  "scheduled_time_to_target_minutes": 90.0,
+  "rainfall_mm": null,
+  "congestion_score": null,
+  "historical_section_average_minutes": null
+}
+```
+
+## 5. Extreme congestion + heavy rain
+
+Tests difficult operating conditions.
+
+```json
+{
+  "train_id": "99999",
+  "target_station_id": "GHY",
+  "observed_at": "2026-09-04T20:00:00+05:30",
+  "current_speed_kmph": 8.0,
+  "average_speed_last_5_minutes": 12.0,
+  "current_delay_minutes": 180.0,
+  "distance_to_target_km": 150.0,
+  "scheduled_time_to_target_minutes": 120.0,
+  "rainfall_mm": 120.0,
+  "congestion_score": 1.0,
+  "historical_section_average_minutes": 240.0
+}
+```
+
+## 6. Ahead of schedule
+
+Tests negative delay values.
+
+```json
+{
+  "train_id": "54321",
+  "target_station_id": "GHY",
+  "observed_at": "2026-09-04T20:10:00+05:30",
+  "current_speed_kmph": 80.0,
+  "average_speed_last_5_minutes": 78.0,
+  "current_delay_minutes": -10.0,
+  "distance_to_target_km": 100.0,
+  "scheduled_time_to_target_minutes": 90.0,
+  "rainfall_mm": 0.0,
+  "congestion_score": 0.1,
+  "historical_section_average_minutes": 95.0
+}
+```
+
+## 7. Invalid: negative speed
+
+This **should fail validation** with a `422 Unprocessable Entity`.
+
+```json
+{
+  "train_id": "12345",
+  "target_station_id": "GHY",
+  "observed_at": "2026-09-04T20:15:00+05:30",
+  "current_speed_kmph": -20.0,
+  "average_speed_last_5_minutes": 40.0,
+  "current_delay_minutes": 10.0,
+  "distance_to_target_km": 50.0,
+  "scheduled_time_to_target_minutes": 60.0
+}
+```
+
+## 8. Invalid: congestion score greater than 1
+
+Also expected to return **422**.
+
+```json
+{
+  "train_id": "12345",
+  "target_station_id": "GHY",
+  "observed_at": "2026-09-04T20:20:00+05:30",
+  "current_speed_kmph": 50.0,
+  "average_speed_last_5_minutes": 45.0,
+  "current_delay_minutes": 10.0,
+  "distance_to_target_km": 50.0,
+  "scheduled_time_to_target_minutes": 60.0,
+  "rainfall_mm": 0.0,
+  "congestion_score": 1.5,
+  "historical_section_average_minutes": 70.0
+}
+```
+
+## 9. Missing required field
+
+Remove `distance_to_target_km`. Expected result: **422 validation error**.
+
+```json
+{
+  "train_id": "12345",
+  "target_station_id": "GHY",
+  "observed_at": "2026-09-04T20:25:00+05:30",
+  "current_speed_kmph": 50.0,
+  "average_speed_last_5_minutes": 45.0,
+  "current_delay_minutes": 10.0,
+  "scheduled_time_to_target_minutes": 60.0
+}
+```
+
+### Minimum test checklist
+
+Test **#1, #2, #3, #4, #6, #7, and #8**. Record:
+
+* HTTP status code
+* ETA prediction
+* delay/risk output
+* model version
+* whether invalid inputs correctly return `422`
+
+One important edge case: **`distance_to_target_km = 0`** should be tested separately. If your model predicts something other than approximately `0` remaining minutes, you may want to add a backend rule that immediately returns arrival/0 ETA when the train is confirmed at the target station.

@@ -1,0 +1,181 @@
+[
+  {
+    "test_name": "1_normal_running_train",
+    "timestamp": "2026-09-04T19:57:58.355527",
+    "expected_status": 200,
+    "actual_status": 200,
+    "passed": true,
+    "response": {
+      "train_id": "12345",
+      "target_station_id": "GHY",
+      "predicted_remaining_minutes": 131.75,
+      "lower_bound_minutes": 107.89,
+      "upper_bound_minutes": 155.62,
+      "model_version": "hybrid-eta-v1"
+    }
+  },
+  {
+    "test_name": "2_almost_at_station",
+    "timestamp": "2026-09-04T19:57:58.363707",
+    "expected_status": 200,
+    "actual_status": 200,
+    "passed": true,
+    "response": {
+      "train_id": "12345",
+      "target_station_id": "GHY",
+      "predicted_remaining_minutes": 9.5,
+      "lower_bound_minutes": 7.86,
+      "upper_bound_minutes": 11.15,
+      "model_version": "hybrid-eta-v1"
+    }
+  },
+  {
+    "test_name": "3_train_stopped",
+    "timestamp": "2026-09-04T19:57:58.388141",
+    "expected_status": 200,
+    "actual_status": 200,
+    "passed": true,
+    "response": {
+      "train_id": "12345",
+      "target_station_id": "GHY",
+      "predicted_remaining_minutes": 1131.82,
+      "lower_bound_minutes": 872.49,
+      "upper_bound_minutes": 1391.15,
+      "model_version": "hybrid-eta-v1"
+    }
+  },
+  {
+    "test_name": "4_optional_fields_null",
+    "timestamp": "2026-09-04T19:57:58.394940",
+    "expected_status": 200,
+    "actual_status": 200,
+    "passed": true,
+    "response": {
+      "train_id": "12345",
+      "target_station_id": "GHY",
+      "predicted_remaining_minutes": 100.5,
+      "lower_bound_minutes": 84.71,
+      "upper_bound_minutes": 116.29,
+      "model_version": "hybrid-eta-v1"
+    }
+  },
+  {
+    "test_name": "5_extreme_conditions",
+    "timestamp": "2026-09-04T19:57:58.418551",
+    "expected_status": 200,
+    "actual_status": 200,
+    "passed": true,
+    "response": {
+      "train_id": "99999",
+      "target_station_id": "GHY",
+      "predicted_remaining_minutes": 577.64,
+      "lower_bound_minutes": 435.39,
+      "upper_bound_minutes": 719.9,
+      "model_version": "hybrid-eta-v1"
+    }
+  },
+  {
+    "test_name": "6_ahead_of_schedule",
+    "timestamp": "2026-09-04T19:57:58.423708",
+    "expected_status": 200,
+    "actual_status": 200,
+    "passed": true,
+    "response": {
+      "train_id": "54321",
+      "target_station_id": "GHY",
+      "predicted_remaining_minutes": 77.9,
+      "lower_bound_minutes": 64.32,
+      "upper_bound_minutes": 91.48,
+      "model_version": "hybrid-eta-v1"
+    }
+  },
+  {
+    "test_name": "7_invalid_negative_speed",
+    "timestamp": "2026-09-04T19:57:58.429560",
+    "expected_status": 422,
+    "actual_status": 422,
+    "passed": true,
+    "response": {
+      "detail": [
+        {
+          "type": "greater_than_equal",
+          "loc": [
+            "body",
+            "current_speed_kmph"
+          ],
+          "msg": "Input should be greater than or equal to 0",
+          "input": -20.0,
+          "ctx": {
+            "ge": 0.0
+          }
+        }
+      ]
+    }
+  },
+  {
+    "test_name": "8_invalid_congestion_over_one",
+    "timestamp": "2026-09-04T19:57:58.449154",
+    "expected_status": 422,
+    "actual_status": 422,
+    "passed": true,
+    "response": {
+      "detail": [
+        {
+          "type": "less_than_equal",
+          "loc": [
+            "body",
+            "congestion_score"
+          ],
+          "msg": "Input should be less than or equal to 1",
+          "input": 1.5,
+          "ctx": {
+            "le": 1.0
+          }
+        }
+      ]
+    }
+  },
+  {
+    "test_name": "9_missing_required_field",
+    "timestamp": "2026-09-04T19:57:58.463801",
+    "expected_status": 422,
+    "actual_status": 422,
+    "passed": true,
+    "response": {
+      "detail": [
+        {
+          "type": "missing",
+          "loc": [
+            "body",
+            "distance_to_target_km"
+          ],
+          "msg": "Field required",
+          "input": {
+            "train_id": "12345",
+            "target_station_id": "GHY",
+            "observed_at": "2026-09-04T20:25:00+05:30",
+            "current_speed_kmph": 50.0,
+            "average_speed_last_5_minutes": 45.0,
+            "current_delay_minutes": 10.0,
+            "scheduled_time_to_target_minutes": 60.0
+          }
+        }
+      ]
+    }
+  },
+  {
+    "test_name": "10_zero_distance",
+    "timestamp": "2026-09-04T19:57:58.467973",
+    "expected_status": 200,
+    "actual_status": 200,
+    "passed": true,
+    "response": {
+      "train_id": "12345",
+      "target_station_id": "GHY",
+      "predicted_remaining_minutes": 3.79,
+      "lower_bound_minutes": 3.19,
+      "upper_bound_minutes": 4.38,
+      "model_version": "hybrid-eta-v1"
+    }
+  }
+]

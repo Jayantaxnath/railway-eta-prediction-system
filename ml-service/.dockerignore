@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+.gitignore
+data/
+tests/
+*.ipynb
+*.md

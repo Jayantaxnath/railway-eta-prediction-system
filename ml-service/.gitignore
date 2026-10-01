@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+venv/
+.venv/
+env/
+
+# Logs
+*.log
+
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# OS
+.DS_Store
+Thumbs.db
+
+# ── Large Dataset Files (>100 MB — too large for GitHub) ──
+# Use the *_sample.csv versions for development.
+# Full datasets should be downloaded from Kaggle separately.
+data/ir_train.csv
+data/ir_test.csv
+
+# Large model output CSVs (generated at training time)
+models/test_delay_predictions.csv

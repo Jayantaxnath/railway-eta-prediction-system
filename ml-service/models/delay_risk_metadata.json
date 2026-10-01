@@ -1,0 +1,17 @@
+{
+  "model_name": "XGBClassifier",
+  "num_training_samples": 1500000,
+  "roc_auc_score": 1.0,
+  "feature_names": [
+    "distance_to_target_km",
+    "scheduled_time_to_target_minutes",
+    "current_delay_minutes",
+    "current_speed_kmph",
+    "average_speed_last_5_minutes",
+    "rainfall_mm",
+    "congestion_score",
+    "route_historical_ontime_pct",
+    "departure_hour",
+    "day_of_week"
+  ]
+}
