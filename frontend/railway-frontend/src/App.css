@@ -1,0 +1,13 @@
+/* =========================================================
+   RAILX DESIGN SYSTEM - MODULAR CSS INDEX
+   Each file carries its own responsive rules.
+   ========================================================= */
+
+@import "./styles/tokens.css";
+@import "./styles/global.css";
+@import "./styles/header.css";
+@import "./styles/dashboard.css";
+@import "./styles/result.css";
+@import "./styles/components.css";
+@import "./styles/pages.css";
+@import "./styles/skeleton.css";

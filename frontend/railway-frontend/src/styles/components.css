@@ -1,0 +1,591 @@
+/* STATION TABLE */
+.station-card {
+  margin-top: 16px;
+  background: white;
+  border: 1px solid #cddded;
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+}
+
+.station-card-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 12px 16px;
+  border-bottom: 1px solid #d6e3ef;
+}
+
+.station-card-title {
+  font-size: 16px;
+  font-weight: 800;
+  color: #0a356a;
+}
+
+/* Two-option segmented control */
+.segmented {
+  display: inline-flex;
+  padding: 3px;
+  gap: 2px;
+  border-radius: 10px;
+  background: #eef4fa;
+  border: 1px solid #d6e3ef;
+}
+
+.segmented button {
+  min-height: 34px;
+  padding: 0 14px;
+  border: none;
+  border-radius: 7px;
+  background: transparent;
+  color: #42668e;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.segmented button.active {
+  background: #ffffff;
+  color: #075aa5;
+  font-weight: 700;
+  box-shadow: 0 1px 4px rgba(15, 23, 42, 0.12);
+}
+
+.station-table-header {
+  min-height: 43px;
+  display: grid;
+  grid-template-columns: 2.2fr 1.25fr 1.25fr 1.25fr 1.25fr;
+  background: #075aa5;
+  color: white;
+  font-size: 14px;
+  font-weight: 700;
+  text-align: center;
+  align-items: center;
+}
+
+.station-table-header > div {
+  min-height: 43px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-right: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.station-row {
+  min-height: 92px;
+  display: grid;
+  grid-template-columns: 2.2fr 1.25fr 1.25fr 1.25fr 1.25fr;
+  border-bottom: 1px solid #d6e3ef;
+  background: white;
+}
+
+.station-row:nth-of-type(even) {
+  background: #f8fbfe;
+}
+
+.station-row.current-station {
+  background: #edf7ff;
+  box-shadow: inset 4px 0 0 #0879e5;
+}
+
+.station-row.no-halt {
+  min-height: 64px;
+}
+
+.station-row.no-halt .station-details > strong {
+  font-weight: 600;
+  color: #42668e;
+}
+
+.passed-toggle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  min-height: var(--tap);
+  padding: 10px 16px;
+  border: none;
+  border-bottom: 1px solid #d6e3ef;
+  background: #f2f7fc;
+  color: #075aa5;
+  font-size: 13px;
+  font-weight: 700;
+  text-align: left;
+}
+
+.passed-toggle:hover {
+  background: #e4effa;
+}
+
+.station-name-cell {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.timeline {
+  width: 70px;
+  align-self: stretch;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.timeline-line {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: #d2dce6;
+}
+
+.timeline-line.active {
+  background: #0877e8;
+}
+
+.timeline-dot {
+  position: relative;
+  z-index: 3;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 3px solid #7d8791;
+  background: white;
+}
+
+.no-halt .timeline-dot {
+  width: 12px;
+  height: 12px;
+  border-width: 2px;
+}
+
+.timeline-dot.passed {
+  border-color: #0879e5;
+  background: #dff0ff;
+}
+
+.timeline-dot.current {
+  width: 26px;
+  height: 26px;
+  border: 4px solid white;
+  background: #0879e5;
+  box-shadow: 0 0 0 3px #0879e5;
+}
+
+.train-pointer {
+  position: absolute;
+  z-index: 5;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 22px;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9px;
+  background: #0879e5;
+  color: #ffffff;
+  border: 3px solid white;
+  box-shadow: 0 3px 8px rgba(0, 91, 190, 0.3);
+}
+
+.station-details {
+  min-width: 0;
+  padding: 12px 8px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.station-details > strong {
+  color: #0c376b;
+  font-size: 15px;
+}
+
+.station-code {
+  margin-top: 3px;
+  color: #315b85;
+  font-size: 12px;
+}
+
+.station-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 7px;
+}
+
+.platform-tag,
+.distance-tag,
+.no-halt-tag,
+.here-tag {
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.platform-tag {
+  background: #ffbd00;
+  color: #111;
+}
+
+.distance-tag {
+  background: #f2f4f7;
+  color: #344054;
+}
+
+.no-halt-tag {
+  background: #f8fafc;
+  color: #64748b;
+  border: 1px dashed #cbd5e1;
+  font-weight: 600;
+}
+
+.here-tag {
+  background: #0879e5;
+  color: #ffffff;
+}
+
+.time-cell {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 8px 4px;
+  border-left: 1px solid #d8e4ef;
+  text-align: center;
+}
+
+.time-cell strong {
+  color: #0a376c;
+  font-size: 15px;
+}
+
+.time-cell small {
+  margin-top: 3px;
+  color: #315d88;
+  font-size: 12px;
+}
+
+/* "Sch 11:53" only shows on mobile, where the scheduled columns are hidden */
+.time-cell .sched-inline {
+  display: none;
+}
+
+.time-cell .late-time {
+  color: #d92d20;
+}
+
+.time-cell .on-time {
+  color: #0b8b49;
+}
+
+.eta-range {
+  margin-top: 2px;
+  font-size: 10px;
+  color: #667085;
+}
+
+.delay-badge {
+  margin-top: 5px;
+  padding: 3px 8px;
+  border-radius: 6px;
+  background: #fee4e2;
+  color: #b42318;
+  border: 1px solid #fecdca;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.delay-badge.on-time-badge {
+  background: #e6f4ea;
+  color: #137333;
+  border-color: #ceebd6;
+}
+
+/* BOTTOM PANELS */
+.bottom-panels {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.info-panel {
+  background: white;
+  border: 1px solid #d2dfec;
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+}
+
+.panel-title {
+  min-height: 42px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  padding: 8px 16px;
+  background: #075da8;
+  color: white;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.eta-grid,
+.position-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.eta-grid > div,
+.position-grid > div {
+  min-height: 76px;
+  padding: 10px 6px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  border-right: 1px solid #d8e4ef;
+}
+
+.eta-grid > div:last-child,
+.position-grid > div:last-child {
+  border-right: none;
+}
+
+.eta-grid span,
+.position-grid span {
+  color: #66809e;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  margin-bottom: 6px;
+}
+
+.eta-grid strong,
+.position-grid strong {
+  color: #0a417c;
+  font-size: 18px;
+}
+
+.eta-grid .red,
+.position-grid .red {
+  color: #d92d20;
+}
+
+.prediction-source {
+  min-height: 36px;
+  padding: 8px 15px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px 8px;
+  border-top: 1px solid #d8e4ef;
+  color: #536f91;
+  font-size: 12px;
+}
+
+.prediction-source strong {
+  color: #274f78;
+  word-break: break-word;
+}
+
+.position-note {
+  padding: 9px 14px;
+  border-top: 1px solid #d8e4ef;
+  color: #536f91;
+  font-size: 12px;
+}
+
+/* ROUTE MAP (Leaflet) */
+.map-card {
+  margin-top: 16px;
+  padding: 20px;
+  background: #ffffff;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-card);
+}
+
+.route-map-canvas {
+  height: 420px;
+  width: 100%;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  overflow: hidden;
+  z-index: 0;
+}
+
+.route-map-train {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #ffffff;
+  border: 2px solid #2563eb;
+  border-radius: 50%;
+  box-shadow: 0 0 0 6px rgba(37, 99, 235, 0.2);
+  font-size: 16px;
+}
+
+.route-map-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+/* TABLET */
+@media (max-width: 1000px) {
+  .station-table-header,
+  .station-row {
+    grid-template-columns: 1.8fr 1fr 1fr 1fr 1fr;
+  }
+
+  .timeline {
+    width: 50px;
+  }
+
+  .station-details > strong {
+    font-size: 14px;
+  }
+
+  .bottom-panels {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* MOBILE: each station becomes a compact card, no sideways scrolling */
+@media (max-width: 700px) {
+  .station-table-header,
+  .sched-cell {
+    display: none;
+  }
+
+  .station-row {
+    min-height: 0;
+    grid-template-columns: 44px 1fr 1fr;
+    grid-template-areas:
+      "tl name name"
+      "tl arr dep";
+  }
+
+  .station-row.no-halt {
+    grid-template-areas:
+      "tl name name"
+      "tl arr arr";
+  }
+
+  /* no-halt stations: the train passes at roughly the same time, one cell is enough */
+  .station-row.no-halt .time-cell:last-child {
+    display: none;
+  }
+
+  .station-row.no-halt .time-cell[data-label="Arrival"]::before {
+    content: "Passes";
+  }
+
+  /* let the timeline and details sit directly in the row grid */
+  .station-name-cell {
+    display: contents;
+  }
+
+  .timeline {
+    grid-area: tl;
+    width: 44px;
+  }
+
+  .station-details {
+    grid-area: name;
+    padding: 12px 12px 4px 4px;
+  }
+
+  .station-details > strong {
+    font-size: 15px;
+  }
+
+  .time-cell {
+    grid-area: arr;
+    align-items: flex-start;
+    text-align: left;
+    padding: 4px 4px 12px;
+    border-left: none;
+  }
+
+  .time-cell[data-label="Departure"] {
+    grid-area: dep;
+  }
+
+  .time-cell::before {
+    content: attr(data-label);
+    margin-bottom: 2px;
+    color: #66809e;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+  }
+
+  .time-cell .sched-inline {
+    display: block;
+  }
+
+  .time-cell strong {
+    font-size: 16px;
+  }
+
+  .train-pointer {
+    width: 30px;
+    height: 30px;
+    font-size: 16px;
+    border-radius: 8px;
+  }
+
+  .timeline-dot.current {
+    width: 20px;
+    height: 20px;
+  }
+
+  .station-card-toolbar {
+    padding: 12px;
+  }
+
+  .segmented {
+    width: 100%;
+  }
+
+  .segmented button {
+    flex: 1;
+    min-height: 38px;
+  }
+
+  .eta-grid,
+  .position-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .eta-grid > div,
+  .position-grid > div {
+    border-bottom: 1px solid #d8e4ef;
+  }
+
+  .eta-grid > div:nth-child(2n),
+  .position-grid > div:nth-child(2n) {
+    border-right: none;
+  }
+
+  .map-card {
+    padding: 14px;
+  }
+
+  .route-map-canvas {
+    height: 320px;
+  }
+}

@@ -1,0 +1,47 @@
+/* SKELETON LOADING PLACEHOLDERS */
+.skeleton {
+  position: relative;
+  overflow: hidden;
+  background: #e2e8f0;
+}
+
+.skeleton::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.65), transparent);
+  animation: skeleton-shimmer 1.6s ease-in-out infinite;
+}
+
+.skeleton-on-blue {
+  background: rgba(255, 255, 255, 0.18);
+}
+
+.skeleton-on-blue::after {
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.35), transparent);
+}
+
+@keyframes skeleton-shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton::after {
+    animation: none;
+  }
+}
+
+.skeleton-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 16px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.skeleton-row:nth-child(even) {
+  background: #fbfcfe;
+}
