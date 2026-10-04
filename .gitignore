@@ -11,6 +11,7 @@ Thumbs.db
 *.log
 
 # Environment variables & secrets — never commit these
+scripts/
 .env
 .env.*
 !.env.example
