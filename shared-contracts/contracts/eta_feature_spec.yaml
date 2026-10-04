@@ -1,0 +1,56 @@
+﻿version: "1.0"
+
+features:
+
+  current_speed_kmph:
+    type: float
+    unit: kmph
+    source: normalized_train_state.speed_kmph
+    derived: false
+    missing_value: sectional_average_speed
+
+  average_speed_last_5_minutes:
+    type: float
+    unit: kmph
+    source: train_state_history
+    derived: true
+    formula: "mean(speed_kmph over previous 5 minutes)"
+    missing_value: sectional_average_speed
+
+  current_delay_minutes:
+    type: float
+    unit: minutes
+    derived: true
+    formula: "actual_running_time - scheduled_running_time"
+
+  distance_to_target_km:
+    type: float
+    unit: km
+    derived: true
+    source: railway_route_network + current_position
+
+  scheduled_time_to_target_minutes:
+    type: float
+    unit: minutes
+    derived: true
+    formula: "scheduled_target_arrival - observed_at"
+
+  rainfall_mm:
+    type: float
+    unit: mm
+    source: weather_provider
+    derived: false
+    missing_value: 0
+
+  congestion_score:
+    type: float
+    range: [0, 1]
+    source: railway_operational_data
+    derived: true
+
+  historical_section_average_minutes:
+    type: float
+    unit: minutes
+    source: historical_journey_data
+    derived: true
+    leakage_rule: "Only historical data available before observed_at may be used."

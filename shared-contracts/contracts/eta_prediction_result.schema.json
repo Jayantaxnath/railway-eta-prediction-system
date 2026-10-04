@@ -1,0 +1,49 @@
+﻿{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ETAPredictionResult",
+  "description": "Raw prediction returned by the ETA model or ML model.",
+  "type": "object",
+  
+  "required": [
+    "train_id",
+    "target_station_id",
+    "predicted_remaining_minutes",
+    "model_version"
+  ],
+
+  "properties": {
+    "train_id": {
+      "type": "string",
+      "description": "Train for which the prediction was generated."
+    },
+    "target_station_id": {
+      "type": "string",
+      "description": "Target station for this prediction."
+    },
+    "predicted_remaining_minutes": {
+      "type": "number",
+      "minimum": 0,
+      "description": "Predicted travel time remaining until arrival."
+    },
+    "lower_bound_minutes": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "minimum": 0,
+      "description": "Lower bound of the prediction interval."
+    },
+    "upper_bound_minutes": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "minimum": 0,
+      "description": "Upper bound of the prediction interval."
+    },
+    "model_version": {
+      "type": "string",
+      "description": "Version of the model that generated the prediction."
+    }
+  }
+}

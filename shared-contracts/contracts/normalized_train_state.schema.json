@@ -1,0 +1,70 @@
+﻿{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NormalizedTrainState",
+  "description": "Canonical representation of the current state of a train after data from external sources has been normalized by the backend.",
+  "type": "object",
+
+  "required": [
+    "train_id",
+    "journey_id",
+    "observed_at",
+    "position",
+    "operational_status"
+  ],
+
+  "properties": {
+    "train_id": {
+      "type": "string",
+      "description": "Unique train number or identifier."
+    },
+
+    "journey_id": {
+      "type": "string",
+      "description": "Unique identifier for this specific train run on a particular date."
+    },
+
+    "observed_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "UTC timestamp when this train state was observed."
+    },
+
+    "position": {
+      "type": "object",
+      "description": "Latest known geographical position of the train.",
+      "required": ["latitude", "longitude"],
+      "properties": {
+        "latitude": {
+          "type": "number",
+          "description": "Train latitude in WGS84 coordinates."
+        },
+        "longitude": {
+          "type": "number",
+          "description": "Train longitude in WGS84 coordinates."
+        }
+      }
+    },
+
+    "speed_kmph": {
+      "type": ["number", "null"],
+      "minimum": 0,
+      "description": "Current speed from GPS or derived from consecutive positions."
+    },
+
+    "operational_status": {
+      "type": "string",
+      "enum": ["RUNNING", "STOPPED", "UNKNOWN"],
+      "description": "Current operational state."
+    },
+
+    "last_station_id": {
+      "type": ["string", "null"],
+      "description": "Most recently passed station."
+    },
+
+    "next_station_id": {
+      "type": ["string", "null"],
+      "description": "Next scheduled station."
+    }
+  }
+}

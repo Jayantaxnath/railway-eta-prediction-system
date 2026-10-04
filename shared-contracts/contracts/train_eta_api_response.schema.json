@@ -1,0 +1,94 @@
+﻿{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "TrainETAAPIResponse",
+  "description": "Frontend-ready response containing current train state and ETA predictions.",
+  "type": "object",
+
+  "required": [
+    "train_id",
+    "last_updated",
+    "upcoming_stations"
+  ],
+
+  "properties": {
+    "train_id": {
+      "type": "string",
+      "description": "Train number or unique identifier."
+    },
+
+    "last_updated": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Time when the ETA data was last calculated."
+    },
+
+    "current_state": {
+      "type": "object",
+      "description": "Current operational information displayed to the user.",
+      "properties": {
+        "speed_kmph": {
+          "type": ["number", "null"]
+        },
+
+        "current_delay_minutes": {
+          "type": ["number", "null"]
+        },
+
+        "operational_status": {
+          "type": ["string", "null"],
+          "enum": ["RUNNING", "STOPPED", "UNKNOWN", null]
+        }
+      }
+    },
+
+    "upcoming_stations": {
+      "type": "array",
+      "description": "ETA predictions for all upcoming stations.",
+
+      "items": {
+        "type": "object",
+
+        "required": [
+          "station_id",
+          "predicted_eta"
+        ],
+
+        "properties": {
+          "station_id": {
+            "type": "string",
+            "description": "Unique station identifier."
+          },
+
+          "station_name": {
+            "type": "string",
+            "description": "Human-readable station name."
+          },
+
+          "scheduled_arrival": {
+            "type": ["string", "null"],
+            "format": "date-time",
+            "description": "Original scheduled arrival time."
+          },
+
+          "predicted_eta": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Dynamic ETA predicted by the system."
+          },
+
+          "earliest_expected_eta": {
+            "type": ["string", "null"],
+            "format": "date-time",
+            "description": "Earliest ETA from the prediction interval."
+          },
+
+          "latest_expected_eta": {
+            "type": ["string", "null"],
+            "format": "date-time",
+            "description": "Latest ETA from the prediction interval."
+          }
+        }
+      }
+    }
+  }
+}
