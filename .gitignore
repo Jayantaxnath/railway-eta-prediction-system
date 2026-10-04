@@ -17,7 +17,6 @@ scripts/
 !.env.example
 CREDENTIALS.md
 GIT_COMMIT_HISTORY.txt
-PERFORMANCE.md
 docker-compose.yml
 
 # Maven build output
