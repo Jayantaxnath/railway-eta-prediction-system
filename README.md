@@ -13,6 +13,10 @@ and when it reaches each station.
 
 ![RailX home page](offline_view_lastest_ui/home.png)
 
+## Demo video
+
+Watch the 2.5-minute walkthrough on YouTube: [RailX demo](https://www.youtube.com/watch?v=7VDw-KSqGyE)
+
 ## What it does
 
 RailX has three views.
